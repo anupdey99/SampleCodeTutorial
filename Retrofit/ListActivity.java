@@ -1,5 +1,3 @@
-package com.adlabs.apps.ohok.activity;
-
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,15 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
-
-
-import com.adlabs.apps.ohok.R;
-import com.adlabs.apps.ohok.adapter.Adapter;
-import com.adlabs.apps.ohok.data.Item;
-import com.adlabs.apps.ohok.data.SOAnswersResponse;
-import com.adlabs.apps.ohok.remote.ApiUtils;
-import com.adlabs.apps.ohok.remote.SOService;
-
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -39,6 +28,7 @@ public class ListActivity extends AppCompatActivity {
         toolbar.setTitle("List Activity");
 
         mService = ApiUtils.getSOService();
+        
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         mAdapter = new Adapter(this,new ArrayList<Item>(0), new Adapter.PostItemListener() {
             @Override
@@ -59,7 +49,8 @@ public class ListActivity extends AppCompatActivity {
 
     private void loadAnswers(){
 
-        mService.getAnswers().enqueue(new Callback<SOAnswersResponse>() {
+        mService.getAnswers()
+            .enqueue(new Callback<SOAnswersResponse>() {
             @Override
             public void onResponse(@NonNull Call<SOAnswersResponse> call, @NonNull Response<SOAnswersResponse> response) {
 
