@@ -1,4 +1,4 @@
-package com.adlabs.apps.ohok.adapter;
+
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -6,9 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.adlabs.apps.ohok.data.Item;
-
 import java.util.List;
 
 /**
