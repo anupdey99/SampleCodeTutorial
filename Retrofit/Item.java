@@ -1,8 +1,3 @@
-package com.adlabs.apps.ohok.data;
-
-/**
- * Created by Anup Dey on 16-Sep-17.
- */
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
