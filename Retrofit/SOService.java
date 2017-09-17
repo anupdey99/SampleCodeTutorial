@@ -1,7 +1,3 @@
-package com.adlabs.apps.ohok.remote;
-
-import com.adlabs.apps.ohok.data.SOAnswersResponse;
-import com.adlabs.apps.ohok.model.ImageModel;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
