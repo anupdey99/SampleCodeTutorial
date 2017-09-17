@@ -1,0 +1,30 @@
+Resize a bitmap image. programmitically
+
+private Bitmap bitmapResize(Bitmap bitmap, int newWidth, int newHeight) {
+
+        if (bitmap.getWidth() == newWidth && bitmap.getHeight() == newHeight ){
+            return bitmap;
+        }else {
+
+            float ratioX = newWidth / (float) bitmap.getWidth();
+            float ratioY = newHeight / (float) bitmap.getHeight();
+            //float middleX = newWidth / 2.0f;
+            //float middleY = newHeight / 2.0f;
+            float middleX = 0;
+            float middleY = 0;
+
+
+            Bitmap scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
+
+            Matrix scaleMatrix = new Matrix();
+            scaleMatrix.setScale(ratioX, ratioY, middleX, middleY);
+
+            Canvas canvas = new Canvas(scaledBitmap);
+            canvas.setMatrix(scaleMatrix);
+            //canvas.drawBitmap(bitmap, middleX - bitmap.getWidth() / 2, middleY - bitmap.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
+            canvas.drawBitmap(bitmap, 0, 0, new Paint(Paint.FILTER_BITMAP_FLAG));
+
+            bitmap.recycle();
+            return scaledBitmap;
+        }
+    } 
