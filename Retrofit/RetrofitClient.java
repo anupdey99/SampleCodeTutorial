@@ -1,13 +1,7 @@
-package com.adlabs.apps.ohok.remote;
+
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-/**
- * Created by Anup Dey on 16-Sep-17.
- */
-
-
 
 public class RetrofitClient {
 
