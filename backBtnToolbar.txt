@@ -1,0 +1,72 @@
+onCreate(){
+
+// if toolbar is available
+
+ final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+
+    getSupportActionBar.setHomeButtonEnabled(true);
+    getSupportActionBar.setDisplayHomeAsUpEnabled(true);
+
+
+// else
+ android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+	    actionBar.setLogo(R.mipmap.ic_launcher);
+            actionBar.setDisplayUseLogoEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+
+}
+
+// must call
+ @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        
+	switch (item.getItemId()) {
+            
+	case android.R.id.home:
+                
+		NavUtils.navigateUpFromSameTask(this);
+		//finish();
+                return true;
+            
+
+		default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+<menufest>
+
+<metadata android: name = "android:support.Parent Activity" 
+	android:value= "package.YourParrentActivity"   /> 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.any_empty_menu, menu);
+        return true;
+    }
+
+
+
+// any_empty_menu
+
+<menu></menu>
+
+
+
+// operation in key event if necessary
+
+ // event calling
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+

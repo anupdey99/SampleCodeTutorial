@@ -1,0 +1,58 @@
+ DBMedicalHistoryManager historyManager = new DBMedicalHistoryManager(this);
+        final ArrayList<HistoryModel> historyModels = historyManager.getMedicalHistoryModelByPersonID(profileID);
+        HistoryAdapter adapter = new HistoryAdapter(this,historyModels);
+
+        Drawable history = AppCompatResources.getDrawable(this,R.drawable.ic_history);
+        // Create Dialog
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Select Medical History");
+        builder.setCancelable(false);
+        builder.setIcon(history);
+
+
+        // Create RecyclerView
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0,0,0,0);
+
+        RecyclerView recyclerView = new RecyclerView(this);
+        recyclerView.setLayoutParams(params);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(recyclerView);
+
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                appHistoryTV.setText( null );
+            }
+        });
+
+        builder.setView(layout);
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, recyclerView, new RecyclerClick_Listener() {
+            @Override
+            public void onClick(View view, int position) {
+
+                historyID = String.valueOf(historyModels.get(position).getHistoryID());
+                dialog.dismiss();
+                String msg = "Medical history ID # " + historyID;
+                appHistoryTV.setText( msg );
+                //Snackbar.make(appHistoryTV,historyID,Snackbar.LENGTH_SHORT).show();
+
+            }
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));

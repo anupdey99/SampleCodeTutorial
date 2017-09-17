@@ -1,0 +1,41 @@
+categoryModels = categoryManager.getAllCategoryList();
+
+        CategoryDialogAdapter adapter = new CategoryDialogAdapter(getActivity(),categoryModels);
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Set Category");
+        builder.setCancelable(false);
+
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //Toast.makeText(getActivity(),""+which,Toast.LENGTH_SHORT).show();
+                catID = which;
+                pCategory.setText("Category : "+categoryModels.get(which).getCategoryName());
+            }
+        });
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.setNeutralButton("New Category", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                newCategory();
+                dialog.cancel();
+            }
+        });
+
+        builder.show();

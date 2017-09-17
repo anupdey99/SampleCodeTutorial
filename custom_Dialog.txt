@@ -1,0 +1,38 @@
+ final EditText edittext = new EditText(getActivity());
+        edittext.setSingleLine(true);
+        edittext.setInputType(9);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(40, 0, 40, 0);
+        edittext.setLayoutParams(params);
+        LinearLayout layout = new LinearLayout(getActivity());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(edittext);
+        
+final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        
+builder.setTitle("Add Category");
+        builder.setView(layout);
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String categoryName = edittext.getText().toString();
+                CategoryModel categoryModel = new CategoryModel(categoryName,"0",String.valueOf(R.mipmap.ic_launcher));
+                 if (categoryManager.addCategory(categoryModel)){
+                     Snackbar.make(view, "New Category Created! ", Snackbar.LENGTH_SHORT).show();
+                     popupCategory();
+                     dialog.dismiss();
+                 }
+            }
+        });
+
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();

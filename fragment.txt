@@ -1,0 +1,20 @@
+Fragment fragment;
+               	FragmentManager manager;
+                FragmentTransaction transaction;
+
+                manager = getFragmentManager();
+                transaction = manager.beginTransaction();
+		transaction.add(R.id.containerMain,fragment);
+                transaction.replace(R.id.containerMain,fragment);
+                transaction.addToBackStack("Name of your Fragment");
+                transaction.commit();
+
+
+
+
+
+
+go back to previous fragment:
+
+FragmentManager manager = getFragmentManager();
+                manager.popBackStack();

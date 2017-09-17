@@ -1,0 +1,57 @@
+How to get actual Image to bitmap?
+No direct way found!
+Save actual image in any file
+then convery that file to bitmap image
+
+
+
+
+
+Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+// create temp file to save pic for that get Uri of that file.
+imageUri = Uri.fromFile(createTemporaryFile());
+// request actual image not bitmap, by flag EXTRA_OUTPUT, get file in uri.
+intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+// get result from camera app.
+startActivityForResult(intent, REQUEST_CAMERA_CODE_any int);
+
+
+// called when data came from camera app.
+@Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+
+if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA_CODE_any int){
+
+// call file from temp directory
+		    File imgFile = new File(tempImgPath);
+                    if (imgFile.exists()) {
+                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+			// delete temp file if necessary
+                        deleteTemporaryFile(tempImgPath);
+
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+			// crop image if necessary
+                        myBitmap = cropToSquare(myBitmap);
+			// resize if necessary
+                        myBitmap = bitmapResize(myBitmap,500,500);
+
+                        profilePictureIMG.setImageBitmap(myBitmap);
+			// compress image 10-100
+                        myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+			// write desire file.
+                        FileOutputStream fo;
+                        try {
+                            fo = new FileOutputStream(getOutputMediaFile());
+                            fo.write(bytes.toByteArray());
+                            fo.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            //Toast.makeText(this,e.printStackTrace(),Toast.LENGTH_SHORT).
+                        }
+
+                    }
+
+}
