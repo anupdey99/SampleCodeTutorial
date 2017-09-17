@@ -7,7 +7,7 @@ package com.adlabs.apps.ohok.remote;
 public class ApiUtils {
 
     //"https://api.stackexchange.com/2.2/"
-    public static final String BASE_URL = "http://www.adlabsbd.com/userup/";
+    public static final String BASE_URL = "https://api.stackexchange.com/2.2/" ;
 
     public static SOService getSOService() {
         return RetrofitClient.getClient(BASE_URL).create(SOService.class);
