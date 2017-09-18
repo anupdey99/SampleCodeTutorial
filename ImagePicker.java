@@ -187,7 +187,8 @@ public class SelectImageActivity extends AppCompatActivity {
     }
 
     private boolean deleteTemporaryFile( Uri uri ){
-     return new File(uri.toString()).delete();
+     File file = new File(uri.getPath());
+        return file.exists() && file.delete();
     }
   
   
