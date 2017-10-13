@@ -1,0 +1,6 @@
+Support drawable for vactor image
+
+Drawable name = AppCompatResources.getDrawable(thisActivity, R.drawable.ic_person);
+        
+profileNameET.setCompoundDrawablesWithIntrinsicBounds(name, null, null, null);
+        
