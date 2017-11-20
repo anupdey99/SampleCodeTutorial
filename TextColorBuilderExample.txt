@@ -1,0 +1,10 @@
+
+model :
+
+	"InsideDhakaDeliveryCustomiseContent": "ক্যাশ অন ডেলিভারী ক্ষেত্রে - ১ টি কিনলে #৫০# টাকা, একের অধিক কিনলে সব মিলিয়ে #৩৫# টাকা।\r\nঅগ্রিম মুল্য প্রদান করলে #৩৫# টাকা ।",
+    
+    "OutsideDhakaDeliveryCustomiseContent": "ক্যাশ অন ডেলিভারী ক্ষেত্রে - ১ টি কিনলে #৯৫# টাকা, একের অধিক কিনলে সব মিলিয়ে #৫৫# টাকা।\r\nঅগ্রিম মুল্য প্রদান করলে #৫৫# টাকা 
+
+Apply :
+
+	mChargeOutSideDhakaTextView.setText(colorBuilder.comaFormattedData(stringtoset), TextView.BufferType.SPANNABLE);

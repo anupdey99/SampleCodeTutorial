@@ -1,0 +1,46 @@
+private void changeToolBarColorWhenScrolling() {
+
+        final LayerDrawable stars = (LayerDrawable) mRatingBar.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(Color.parseColor("#FF3D00"), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(0).setColorFilter(Color.parseColor("#9E9E9E"), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(1).setColorFilter(Color.parseColor("#9E9E9E"), PorterDuff.Mode.SRC_ATOP);
+
+        mMainScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                final int scrollY = mMainScrollView.getScrollY();
+                final int boundY = 300;
+                final float ratio = (float) (scrollY / boundY);
+
+                //mToolbar.setBackgroundColor(Color.parseColor("#344C54"));
+                mToolbar.setBackgroundColor(Color.parseColor("#FF3D00"));
+                int alpha = (int) (ratio * 30);
+
+                if (scrollY == 0) {
+                    mToolbar.setBackgroundResource(R.drawable.action_bar_bg);
+                }
+                if (alpha < 210 && scrollY != 0) {
+                    if (alpha >= 30) {
+                        if (mCallPopularProductAfterScrolling == 0) {
+                            recentlyviewed();
+                            PopularProduct(mDealId, mProfileId);
+                            merchantDetails(mDealId, mProfileId);
+                            mCallPopularProductAfterScrolling = 1;
+                        }
+
+                        /*if (mCallCrazyDealAfterScrolling == 0) {
+                            crazyDeals();
+                            mCallCrazyDealAfterScrolling = 1;
+                        }*/
+                    }
+
+                    mToolbar.getBackground().setAlpha(alpha + 35);
+
+                } else if (alpha > 210 && scrollY != 0) {
+                    mToolbar.setBackgroundColor(Color.parseColor("#FF3D00"));
+                }
+
+
+            }
+        });
+    }
