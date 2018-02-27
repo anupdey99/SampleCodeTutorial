@@ -1,4 +1,4 @@
-package com.ajkerdeal.app.android;
+
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -21,9 +21,7 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by MhRaju on 07/01/2017.
- */
+
 
 public class RetrofitSingleton {
     private static Retrofit sRetrofit;
@@ -100,8 +98,7 @@ public class RetrofitSingleton {
                         deviceId = deviceId1.concat(deviceId2);
                         customerId = customerId1.concat(customerId2);
 
-                        //  String token = "@D37@5t1c_~k45?Lj7";
-
+                        
                         Request orginalReq = chain.request();
 
                         Request newRequest = orginalReq.newBuilder()
@@ -161,7 +158,7 @@ public class RetrofitSingleton {
                         deviceId = deviceId1.concat(deviceId2);
                         customerId = customerId1.concat(customerId2);
 
-                        //  String token = "@D37@5t1c_~k45?Lj7";
+                        
 
                         Request orginalReq = chain.request();
 
@@ -179,26 +176,21 @@ public class RetrofitSingleton {
                 .cache(new Cache(context.getCacheDir(), 10 * 1024 * 1024))
                 .build();*/
 
-        /*http://adm.ajkerdeal-stage.munim.net/
-        http://merchantapi.ajkerdeal-stage.munim.net/
-        http://elastic.ajkerdeal-stage.munim.net/
-        http://es2.ajkerdeal-stage.munim.net/
-        http://api.ajkerdeal-stage.munim.net/
-         */
+        
 
 
         if (baseUrl.equals("apiBase")) {
 
             sRetrofit = new Retrofit.Builder()
                     .client(okHttpClient)
-                    .baseUrl("http://api.ajkerdeal-stage.munim.net")  //  http://api.ajkerdeal.com
+                    .baseUrl("http://api....net")  
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
         } else if (baseUrl.equals("elasticBase")) {
             sRetrofit = new Retrofit.Builder()
                     .client(okHttpClient)
-                    .baseUrl("http://elastic.ajkerdeal-stage.munim.net")    // https://elastic.ajkerdeal.com
+                    .baseUrl("http://elastic....net")    
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -206,21 +198,21 @@ public class RetrofitSingleton {
 
             sRetrofit = new Retrofit.Builder()
                     .client(okHttpClient)
-                    .baseUrl("http://merchantapi.ajkerdeal-stage.munim.net")  //  http://merchantapi.ajkerdeal.com
+                    .baseUrl("http://merchantapi....net")  
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
         } else if (baseUrl.equals("awsBase")) {
             sRetrofit = new Retrofit.Builder()
                     .client(okHttpClient)
-                    .baseUrl("http://es2.ajkerdeal-stage.munim.net")  //  https://es2.ajkerdeal.com
+                    .baseUrl("http://es2.....net")  
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
         }else if (baseUrl.equals("imageUploadBase")) {
             sRetrofit = new Retrofit.Builder()
                     .client(okHttpClient)
-                    .baseUrl("http://adm.ajkerdeal-stage.munim.net")   // https://adm.ajkerdeal.com
+                    .baseUrl("http://adm....net")   
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -228,7 +220,7 @@ public class RetrofitSingleton {
 
             sRetrofit = new Retrofit.Builder()
                     .client(okHttpClient)
-                    .baseUrl("http://ajkerdeal-stage-bridge-6281.munim.net")   // http://bridge.ajkerdeal.com
+                    .baseUrl("http://....net")   
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -236,7 +228,7 @@ public class RetrofitSingleton {
 
             sRetrofit = new Retrofit.Builder()
                     .client(okHttpClient)
-                    .baseUrl("http://api.ajkerdeal-stage.munim.net")  //  http://api.ajkerdeal.com
+                    .baseUrl("http://api....net")  
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
