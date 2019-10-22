@@ -111,3 +111,88 @@ permissionRationaleDialog.show();
 
 }
 
+
+
+// Kotlic fragment
+
+val REQUEST_CODE_CAMERA = 123
+val permissions = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    
+    fun isCameraPermissions(): Boolean {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+
+            val cameraPermission = ContextCompat.checkSelfPermission(context!!, Manifest.permission.CAMERA)
+            val storagePermission = ContextCompat.checkSelfPermission(context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+            return if (cameraPermission != PackageManager.PERMISSION_GRANTED || storagePermission != PackageManager.PERMISSION_GRANTED) {
+
+                val cameraPermissionRationale = ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA)
+                val storagePermissionRationale = ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if (cameraPermissionRationale || storagePermissionRationale) {
+                    requestPermissions(permissions, REQUEST_CODE_CAMERA)
+                } else {
+                    requestPermissions(permissions, REQUEST_CODE_CAMERA)
+                }
+                false // Deal matters when user give permission.
+            } else {
+                true
+            }
+        } else {
+            return true
+        }
+    }//
+
+
+override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_CODE_CAMERA -> {
+                if (grantResults.isNotEmpty()){
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+
+                        // Task after permissions given
+                        goToSacn()
+                    } else {
+                        val cameraPermissionRationale = ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA)
+                        val storagePermissionRationale = ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        if (cameraPermissionRationale || storagePermissionRationale) {
+                            ActivityCompat.requestPermissions(requireActivity(), permissions, REQUEST_CODE_CAMERA)
+                        } else {
+                            val message = "Please go to Settings to enable Camera & Storage permission. (Settings-apps--permissions)"
+                            showDialog(message)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+fun showDialog(msg: String) {
+
+        val permissionRationaleDialog = MaterialAlertDialogBuilder(context)
+        permissionRationaleDialog.setTitle("Permission Required!")
+        permissionRationaleDialog.setMessage(msg)
+        permissionRationaleDialog.setCancelable(false)
+        //icon
+        permissionRationaleDialog.setPositiveButton("Settings") { dialog, which ->
+            val i = Intent()
+            i.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+            i.addCategory(Intent.CATEGORY_DEFAULT)
+            i.data = Uri.parse("package:" + requireActivity().packageName)
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+            startActivity(i)
+        }
+        permissionRationaleDialog.setNegativeButton( "Deny") { dialog, which ->
+            dialog.cancel()
+            //finish();
+            //System.exit(0);
+        }
+        permissionRationaleDialog.show()
+
+    }
+
+
