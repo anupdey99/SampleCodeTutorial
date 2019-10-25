@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.fcm
+
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -136,3 +136,28 @@ class FCMService: FirebaseMessagingService() {
         SessionManager.firebaseToken = p0
     }
 }
+
+/*
+
+<service
+            android:name=".fcm.FCMService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_tiger" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+            
+            
+            FirebaseMessaging.getInstance().subscribeToTopic("Topic")
+
+*/
+
