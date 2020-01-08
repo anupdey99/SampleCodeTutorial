@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.utils
+package com.bd.utils
 
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
