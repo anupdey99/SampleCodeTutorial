@@ -1,4 +1,4 @@
-package com.bd.deliverytiger.app.utils
+package com.bd.app.utils
 
 import android.content.Context
 import android.view.LayoutInflater
