@@ -1,0 +1,39 @@
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.annotation.NonNull
+import androidx.core.content.edit
+
+object SessionManager {
+
+    private val Pref_Name = "com.example.app.session"
+    private lateinit var pref: SharedPreferences
+
+    fun init(@NonNull context: Context) {
+        pref = context.getSharedPreferences(Pref_Name, Context.MODE_PRIVATE)
+    }
+
+    fun clearSession() {
+        /*val isRememberCheck = isRemember
+        val mobile = loginMobile
+        val password = loginPassword*/
+        pref.edit {
+            clear()
+            /*if (isRememberCheck) {
+                loginMobile = mobile
+                loginPassword = password
+                isRemember = isRememberCheck
+            }*/
+        }
+    }
+
+    var isLogin: Boolean
+        get() {
+            return pref.getBoolean(Is_LOGIN, false)
+        }
+        set(value) {
+            pref.edit {
+                putBoolean(Is_LOGIN, value)
+            }
+        }
+
+}
