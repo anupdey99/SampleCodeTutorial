@@ -1,0 +1,84 @@
+import .BuildConfig
+import .AppConstant
+import com.google.gson.GsonBuilder
+import okhttp3.Credentials
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.security.SecureRandom
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
+import javax.net.ssl.*
+
+object RetrofitSingleton {
+
+    val instance: Retrofit
+
+    init {
+
+        val builder = OkHttpClient.Builder()
+        if (BuildConfig.DEBUG) {
+            val httpLoggingInterceptor = HttpLoggingInterceptor()
+            // Set desired log level. Use Level.BODY for debugging errors.
+            val logging = httpLoggingInterceptor.apply {
+                httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            }
+            builder.addInterceptor(logging)
+        }
+        val authToken = Credentials.basic("OPENVIDUAPP", "MY_SECRET")
+        builder.addInterceptor(AuthInterceptor(authToken))
+        //builder.cache(Cache(context.getCacheDir(),  10 * 1024 * 1024 )) // 10 MB
+
+        // Create a trust manager that does not validate certificate chains
+        // Create a trust manager that does not validate certificate chains
+        val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+                    @Throws(CertificateException::class)
+                    override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
+                    }
+
+                    @Throws(CertificateException::class)
+                    override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
+                    }
+
+                    override fun getAcceptedIssuers(): Array<X509Certificate> {
+                        return arrayOf()
+                    }
+                }
+            )
+        // Install the all-trusting trust manager
+        val sslContext = SSLContext.getInstance("SSL")
+        sslContext.init(null, trustAllCerts, SecureRandom())
+        // Create an ssl socket factory with our all-trusting manager
+        val sslSocketFactory = sslContext.socketFactory
+        builder.sslSocketFactory(sslSocketFactory, object : X509TrustManager {
+            override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) {
+            }
+
+            override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) {
+            }
+
+            override fun getAcceptedIssuers(): Array<X509Certificate> {
+                return arrayOf()
+            }
+        })
+        builder.hostnameVerifier(object : HostnameVerifier {
+            override fun verify(p0: String?, p1: SSLSession?): Boolean {
+                return true
+            }
+        })
+
+        val httpClient = builder.build()
+
+        val gson = GsonBuilder()
+            .setLenient()// adding a Gson converter with leniency to make parsing the results simple.
+            .create()
+
+        instance = Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .baseUrl(AppConstant.BASE_URL)
+            .client(httpClient)
+            .build()
+    }
+
+}
