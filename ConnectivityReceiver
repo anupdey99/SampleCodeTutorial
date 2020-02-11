@@ -1,0 +1,112 @@
+##### Manifest #####
+<receiver
+    android:name=".utils.ConnectivityReceiver"
+    android:enabled="true">
+    <intent-filter>
+        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+    </intent-filter>
+</receiver>
+
+#### Activity ####
+extend ConnectivityReceiver.ConnectivityReceiverListener
+private var snackBar: Snackbar? = null
+
+override fun onCreate(){
+registerReceiver(ConnectivityReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+}
+
+override fun onStart() {
+    super.onStart()
+    ConnectivityReceiver.connectivityReceiverListener = this
+}
+
+override fun onStop() {
+    super.onStop()
+    ConnectivityReceiver.connectivityReceiverListener = null
+}
+
+override fun onNetworkConnectionChanged(isConnected: Boolean) {
+    if (!isConnected) {
+        snackBar = Snackbar.make(findViewById(R.id.toolbar), "You are offline", Snackbar.LENGTH_LONG) //Assume "rootLayout" as the root layout of every activity.
+        snackBar?.duration = BaseTransientBottomBar.LENGTH_INDEFINITE
+        snackBar?.show()
+    } else {
+        snackBar?.dismiss()
+    }
+}
+
+class ConnectivityReceiver: BroadcastReceiver() {
+
+    companion object {
+        var connectivityReceiverListener: ConnectivityReceiverListener? = null
+    }
+
+    interface ConnectivityReceiverListener {
+        fun onNetworkConnectionChanged(isConnected: Boolean)
+    }
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        if (connectivityReceiverListener != null) {
+            connectivityReceiverListener!!.onNetworkConnectionChanged(isOnline(context))
+        }
+    }
+
+    private fun isOnline(context: Context?): Boolean {
+        var connected = false
+        context?.let {
+            val cm = it.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val networkCapabilities = cm.activeNetwork ?: return false
+                val actNw = cm.getNetworkCapabilities(networkCapabilities) ?: return false
+                // Check if connected any network
+                connected = actNw.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                // Check if only WIFI/CELLULAR/ETHERNET/VPN
+                /*connected = when {
+                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_VPN) -> true
+                    else -> false
+                }*/
+            } else {
+                val netInfo = cm.activeNetworkInfo
+                connected = netInfo?.isConnectedOrConnecting == true
+            }
+        }
+        return connected
+    }
+
+    /*private fun isConnectedOrConnecting(context: Context): Boolean {
+
+        val connMgr = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connMgr.activeNetworkInfo
+
+        *//*val builder = NetworkRequest.Builder().apply {
+            addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            addTransportType(NetworkCapabilities.TRANSPORT_VPN)
+        }
+        val networkRequest = builder.build()
+        connMgr.registerNetworkCallback(networkRequest, object: ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                super.onAvailable(network)
+                var connected = false
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    connected = connMgr.bindProcessToNetwork(network)
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    connected = ConnectivityManager.setProcessDefaultNetwork(network)
+                }
+                if (connected) {
+
+                }
+            }
+        })*//*
+
+        return networkInfo != null && networkInfo.isConnectedOrConnecting
+    }*/
+
+
+
+
+}
