@@ -1,0 +1,25 @@
+enum class Status {
+    NONE,
+    LOADING,
+    LOADED,
+    SUCCESS,
+    FAILED,
+    EMPTY,
+    INITLOADING,
+    UNAUTH
+}
+
+data class NetworkState private constructor(
+        val status: Status,
+        val msg: String? = null) {
+    companion object {
+        val NONE = NetworkState(Status.NONE)
+        val LOADING = NetworkState(Status.LOADING)
+        val INITLOADING = NetworkState(Status.INITLOADING)
+        val LOADED = NetworkState(Status.LOADED)
+        val SUCCESS = NetworkState(Status.SUCCESS)
+        val EMPTY = NetworkState(Status.EMPTY)
+        fun success(msg: String?) = NetworkState(Status.SUCCESS, msg)
+        fun error(msg: String?) = NetworkState(Status.FAILED, msg)
+    }
+}
