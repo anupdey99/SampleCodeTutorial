@@ -62,6 +62,46 @@ object DigitConverter {
         return banglaDate
     }
 
+    fun toBanglaDate(stamp: Long, pattern: String = "yyyy-MM-dd HH:mm:ss"): String {
+
+        if (stamp == 0L) {
+            return ""
+        }
+        val dateFormatter = SimpleDateFormat(pattern, Locale.US)
+        try {
+
+            val date = Date(stamp)
+            val calendar = Calendar.getInstance()
+            if (date != null) {
+                calendar.time = date
+                val year = calendar.get(Calendar.YEAR)
+                val month = calendar.get(Calendar.MONTH)
+                val day = calendar.get(Calendar.DAY_OF_MONTH)
+                val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                val minute = calendar.get(Calendar.MINUTE)
+                //val second = calendar.get(Calendar.SECOND)
+
+                return engCahrReplacer(day.toString()) + " " + banglaMonth[month] + ", " + engCahrReplacer(year.toString()) + " " + engCahrReplacer("${timePhase(hour)} ${hourIn12(hour)}:${minute.toString().padStart(2,'0')}")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return ""
+    }
+
+    fun toBanglaDate(dayOfMonth: Int, monthOfYear: Int, year: Int): String {
+
+        try {
+            //return engCahrReplacer(dayOfMonth.toString()) + " " + banglaMonth[monthOfYear] + ", " + engCahrReplacer(year.toString())
+            return "${engCahrReplacer(dayOfMonth.toString())} ${banglaMonth[monthOfYear]}, ${engCahrReplacer(
+                year.toString()
+            )}"
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return ""
+    }
+    
     private fun engCahrReplacer(string: String): String {
         return string.replace('0', '০')
             .replace('1', '১')
@@ -80,4 +120,18 @@ object DigitConverter {
         return decimalFormat?.format(digits) ?: digits.toString()
     }
 
+    fun timePhase(hourOfDay: Int) = when (hourOfDay) {
+        in 0..4 -> "রাত"
+        in 5..11 -> "সকাল"
+        in 12..15 -> "দুপুর"
+        in 16..17 -> "বিকাল"
+        in 18..20 -> "সন্ধ্যা"
+        in 21..24 -> "রাত"
+        else -> {
+            ""
+        }
+    }
+
+    fun hourIn12(hourOfDay: Int): Int = if(hourOfDay == 12 || hourOfDay == 0) 12 else hourOfDay % 12
+    
 }
