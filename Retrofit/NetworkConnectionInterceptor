@@ -1,0 +1,38 @@
+import android.content.Context
+
+import okhttp3.Interceptor
+import okhttp3.Response
+
+class NetworkConnectionInterceptor(private val context: Context): Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        if (!isInternetAvailable()) throw NoInternetException("No network connection")
+        return chain.proceed(chain.request())
+    }
+
+    private fun isInternetAvailable(): Boolean {
+        return context?.isConnectedToNetwork()
+    }
+
+}
+
+fun Context.isConnectedToNetwork(): Boolean {
+    var isConnected = false
+    val connectivityManager = this.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        connectivityManager?.let {
+            val networkCapabilities = it.activeNetwork ?: return false
+            val activeNetwork = it.getNetworkCapabilities(networkCapabilities) ?: return false
+            isConnected = activeNetwork.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            /*activeNetwork.apply {
+                isConnected = when{
+                    hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                    hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                    else -> false
+                }
+            }*/
+        }
+    } else {
+        isConnected = connectivityManager?.activeNetworkInfo?.isConnectedOrConnecting == true
+    }
+    return isConnected
+}
