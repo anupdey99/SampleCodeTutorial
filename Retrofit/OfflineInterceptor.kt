@@ -23,6 +23,9 @@ class OfflineInterceptor(private val context: Context): Interceptor {
                 .build()
 
         }
+       else {
+            response = response.newBuilder().header("Cache-Control", "public, max-age=" + 5).build()
+        }
         return chain.proceed(response)
     }
 }
