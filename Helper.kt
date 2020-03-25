@@ -267,3 +267,39 @@ override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         // point is inside view bounds
         return ((x > viewX && x < (viewX + view.width)) && (y > viewY && y < (viewY + view.height)))
     }
+
+fun Fragment.setToolbarTitle(title: String) {
+    (activity as DashboardActivity).supportActionBar?.title = title
+}
+
+fun Context.toast(msg: String?) {
+    if (msg != null)
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+}
+
+inline fun <reified T> Response<*>.parseErrJsonResponse(): T? {
+
+    val gson = Gson()
+    val response = errorBody()?.string()
+    if(response != null)
+        try {
+            return gson.fromJson(response, T::class.java)
+        } catch(e: Exception) {
+            e.printStackTrace()
+        }
+    return null
+}
+
+fun View.showSnackbar(msg: String?, duration: Int = Snackbar.LENGTH_SHORT) {
+    if (!msg.isNullOrEmpty()) {
+        Snackbar.make(this, msg, duration).show()
+    }
+}
+
+fun View.snackbarWithAction(message: String, actionText: Int = R.string.request_permission, action: () -> Unit) {
+    Snackbar.make(this, message, Snackbar.LENGTH_LONG).setAction(actionText) { action() }.show()
+}
+
+val <T> T.exhaustive: T
+    get() = this
+
