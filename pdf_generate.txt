@@ -1,0 +1,155 @@
+//Dependency
+// android.graphics.pdf.PdfDocument
+// implementation "com.pdfview:pdfview-android:1.0.0"
+
+fun generate(model: InvoicePdfData): String? {
+
+    val shopName = model.shopName
+    val customerName = model.customerName
+    val customerContact = model.customerPhone
+    val invoiceNo = model.invoiceNo
+    val date = model.date
+    val serial = model.serial
+    val description = model.description
+    val monthText = model.month
+    val amount = model.amount
+    val merchantAccount = model.shopMerchantAcc
+
+    val pdfDocument = PdfDocument()
+    val paint = Paint()
+    val titlePint = Paint()
+
+
+    val pageWidth = 595
+    val pageHeight = 842
+    val leftMargin = 20f
+    val rightMargin = pageWidth - 20f
+    val pageInfo = PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
+    val page1 = pdfDocument.startPage(pageInfo)
+    val canvas = page1.canvas
+
+
+    with(titlePint) {
+        color = Color.BLACK
+        textAlign = Paint.Align.CENTER
+        typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        textSize = 22f
+    }
+    canvas.drawText(shopName, pageWidth/2f, 40f, titlePint)
+    with(titlePint) {
+        color = Color.BLACK
+        textAlign = Paint.Align.CENTER
+        typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        textSize = 18f
+    }
+    canvas.drawText("Invoice", pageWidth/2f, 60f, titlePint)
+
+    with(titlePint) {
+        color = Color.BLACK
+        textAlign = Paint.Align.LEFT
+        typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        textSize = 16f
+    }
+    canvas.drawText("Customer Name: $customerName", leftMargin, 120f, titlePint)
+    canvas.drawText("Contact No: $customerContact", leftMargin, 140f, titlePint)
+
+    with(titlePint) {
+        color = Color.BLACK
+        textAlign = Paint.Align.RIGHT
+        typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        textSize = 16f
+    }
+    canvas.drawText("Invoice No: $invoiceNo", rightMargin, 120f, titlePint)
+    canvas.drawText("Date: $date", rightMargin, 140f, titlePint)
+
+    with(paint) {
+        style = Paint.Style.STROKE
+        strokeWidth = 1f
+    }
+    canvas.drawRect(leftMargin, 170f, rightMargin, 210f, paint)
+
+    with(titlePint) {
+        color = Color.BLACK
+        textAlign = Paint.Align.LEFT
+        typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        textSize = 16f
+    }
+
+    val title1 = leftMargin + 10f
+    val title2 = 100f
+    val title3 = 370f
+    val title4 = 500f
+    //val title5 = 550f
+    canvas.drawText("S. No.", title1, 195f, titlePint)
+    canvas.drawText("Package", title2, 195f, titlePint)
+    canvas.drawText("Month", title3, 195f, titlePint)
+    canvas.drawText("Amount", title4, 195f, titlePint)
+
+    canvas.drawLine(title2 - 10f, 175f, title2 - 10f, 205f, titlePint)
+    canvas.drawLine(title3 - 10f, 175f, title3 - 10f, 205f, titlePint)
+    canvas.drawLine(title4 - 10f, 175f, title4 - 10f, 205f, titlePint)
+    //canvas.drawLine(180f, 790f, 180f, 840f, titlePint)
+
+
+    canvas.drawText(serial, title1, 240f, titlePint)
+    canvas.drawText(description, title2, 240f, titlePint)
+    canvas.drawText(monthText, title3, 240f, titlePint)
+    titlePint.textAlign = Paint.Align.RIGHT
+    canvas.drawText(amount, rightMargin-10f, 240f, titlePint)
+    titlePint.textAlign = Paint.Align.LEFT
+
+    canvas.drawLine(title3, 280f, rightMargin, 280f, titlePint)
+    titlePint.textSize = 18f
+    canvas.drawText("Total", title3, 310f, titlePint)
+    titlePint.textAlign = Paint.Align.RIGHT
+    canvas.drawText(amount, rightMargin-10f, 310f, titlePint)
+    titlePint.textAlign = Paint.Align.LEFT
+
+    if (merchantAccount.isNotEmpty()) {
+        with(titlePint) {
+            color = Color.BLACK
+            textAlign = Paint.Align.CENTER
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+            textSize = 18f
+        }
+        canvas.drawText("Scan to pay", pageWidth/2f, 370f, titlePint)
+        val qrcode = qrCodeGenerate(merchantAccount, 150, 150)
+        canvas.drawBitmap(qrcode, pageWidth/2f - 70, 375f, paint)
+        canvas.drawText(merchantAccount, pageWidth/2f, 540f, titlePint)
+    }
+
+
+
+
+
+    // end document
+    pdfDocument.finishPage(page1)
+
+    //val dateString = String.format(Locale.US,"%02d-%02d-%04d", day, month+1, year)
+    val file = File(  "${Environment.getExternalStorageDirectory()}", "/${context.getString(R.string.app_name)}")
+    if (!file.exists()){
+        file.mkdirs()
+    }
+    //Invoice_$dateString.pdf
+    val file1 = File(file, "/Invoice_$invoiceNo.pdf")
+
+    try {
+        pdfDocument.writeTo(FileOutputStream(file1))
+    }catch (e: IOException) {
+        e.printStackTrace()
+        Timber.e(e)
+    }
+    pdfDocument.close()
+
+    return file1.absolutePath
+} 
+
+fun viewPDF() {
+
+    val pdfPath = arguments?.getString("pdfPath", "") ?: ""
+    val file = File(pdfPath)
+    if (file.exists()) {
+        setToolbarTitle(file.name)
+            binding.pdfView.fromFile(file).show()
+    }
+}
