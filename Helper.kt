@@ -303,3 +303,24 @@ fun View.snackbarWithAction(message: String, actionText: Int = R.string.request_
 val <T> T.exhaustive: T
     get() = this
 
+override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        if (event?.action == MotionEvent.ACTION_DOWN){
+            val view = currentFocus
+            if (view is TextInputEditText) {
+                if (!isPointInsideView(event.rawX, event.rawY, view)) {
+                    view.clearFocus();
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
+    }
+
+    private fun isPointInsideView(x: Float, y: Float, view: View): Boolean{
+        val location = IntArray(2)
+        view.getLocationOnScreen(location)
+        val viewX = location[0]
+        val viewY = location[1]
+
+        // point is inside view bounds
+        return ((x > viewX && x < (viewX + view.width)) && (y > viewY && y < (viewY + view.height)))
+    }
