@@ -1,0 +1,43 @@
+POST: https://fcm.googleapis.com/fcm/send
+Headers:
+Authorization:key={project_Web_API_Key}
+Content-Type:application/json
+
+Setup
+
+implementation 'com.google.firebase:firebase-messaging:20.1.6'
+
+Activity
+
+FirebaseMessaging.getInstance().subscribeToTopic("Topic")
+FirebaseInstanceId.getInstance().instanceId.addOnCompleteListener { task ->
+	if (task.isSuccessful) {
+                val token = task.result?.token
+                SessionManager.firebaseToken = token ?: ""
+                Timber.d("FirebaseToken:\n${token}")
+  }
+}
+
+
+Manifest
+
+<service
+            android:name=".fcm.FCMService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_logo" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+
+
+
+
