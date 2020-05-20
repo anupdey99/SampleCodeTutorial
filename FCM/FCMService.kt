@@ -34,10 +34,12 @@ class FCMService : FirebaseMessagingService() {
         val type = p0.data["notificationType"] ?: "0"
         val imageLink = p0.data["imageLink"] ?: ""
         val bigText = p0.data["bigText"] ?: ""
-        val productImage = p0.data["productImage"] ?: ""
+        
+        val model = FCMNotification(type, title, description, bigText, imageLink)
 
         val intent = Intent(this, HomeActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.putExtra("data", model)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, System.currentTimeMillis().toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
 
