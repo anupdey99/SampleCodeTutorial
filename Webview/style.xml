@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="MyProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:indeterminateTint">@color/colorPrimary</item>
+    </style>
+
+</resources>

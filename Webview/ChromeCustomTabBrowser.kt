@@ -5,9 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
-import com.example.R
 import retrofit2.http.Url
 import timber.log.Timber
+
+//dependency implementation 'androidx.browser:browser:1.2.0'
 
 object ChromeCustomTabBrowser {
 
