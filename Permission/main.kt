@@ -62,6 +62,29 @@ fun isCameraPermissions():Boolean{
   }
 }//
 
+
+private fun isLocationPermission(): Boolean {
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val permission1 = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        return if (permission1 != PackageManager.PERMISSION_GRANTED) {
+            val permission1Rationale = ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            if (permission1Rationale) {
+                ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE)
+                // For fragment
+                //requestPermissions(permissions, PERMISSION_REQUEST_CODE)
+            } else {
+                ActivityCompat.requestPermissions(this, permissions, PERMISSION_REQUEST_CODE)
+            }
+            false
+        } else {
+            true
+        }
+    } else {
+        return true
+    }
+}
+
 override fun onRequestPermissionsResult(requestCode:Int,permissions:Array<String>,grantResults:IntArray){
   super.onRequestPermissionsResult(requestCode,permissions,grantResults)
   when(requestCode){

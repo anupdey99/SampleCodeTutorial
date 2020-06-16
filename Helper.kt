@@ -300,6 +300,15 @@ fun View.snackbarWithAction(message: String, actionText: Int = R.string.request_
     Snackbar.make(this, message, Snackbar.LENGTH_LONG).setAction(actionText) { action() }.show()
 }
 
+fun View.snackbar(message: String, length: Int = Snackbar.LENGTH_INDEFINITE, actionName: String, onClick: ((view: View) -> Unit)? = null){
+    Snackbar.make(this, message, length).also { snackbar ->
+        snackbar.setAction(actionName) {
+            onClick?.invoke(it)
+            snackbar.dismiss()
+        }
+    }.show()
+}
+
 val <T> T.exhaustive: T
     get() = this
 
