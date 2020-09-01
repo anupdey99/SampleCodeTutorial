@@ -24,7 +24,7 @@ private fun download(url: String): Long {
         Timber.d("debugDownload FullPATH $fullPathDownloadedFile")
 
         val request = DownloadManager.Request(uri)
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileDir)
             .setTitle(fileName)
             .setDescription("Downloading")

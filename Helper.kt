@@ -333,3 +333,15 @@ override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         // point is inside view bounds
         return ((x > viewX && x < (viewX + view.width)) && (y > viewY && y < (viewY + view.height)))
     }
+
+    fun isPackageInstalled(packageManager: PackageManager, packageName: String): Boolean {
+    return try {
+        packageManager.getPackageInfo(packageName, 0)
+        true
+    } catch (e: Exception) {
+        false
+    }
+}
+
+fun Number.spToPx(context: Context) = TypedValue.applyDimension(
+    TypedValue.COMPLEX_UNIT_SP, this.toFloat(), context.resources.displayMetrics).toInt()
