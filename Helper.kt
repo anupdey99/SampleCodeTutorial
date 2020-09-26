@@ -345,3 +345,13 @@ override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
 
 fun Number.spToPx(context: Context) = TypedValue.applyDimension(
     TypedValue.COMPLEX_UNIT_SP, this.toFloat(), context.resources.displayMetrics).toInt()
+
+
+fun getFileContentType(filePath: String): String? {
+    val file = File(filePath)
+    val map = MimeTypeMap.getSingleton()
+    val ext = MimeTypeMap.getFileExtensionFromUrl(file.name)
+    var type = map.getMimeTypeFromExtension(ext)
+    if (type == null) type = "*/*"
+    return type
+}
