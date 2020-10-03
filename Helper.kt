@@ -355,3 +355,9 @@ fun getFileContentType(filePath: String): String? {
     if (type == null) type = "*/*"
     return type
 }
+
+fun Bundle.bundleToString(): String {
+    return this.keySet().joinToString(", ", "{", "}") { key ->
+        "$key=${this[key]}"
+    }
+}
