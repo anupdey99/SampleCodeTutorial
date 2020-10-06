@@ -1,0 +1,13 @@
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:max="100"
+        style="@style/circularProgressBar1"
+        tools:progress="50"/>
+
+</LinearLayout>
